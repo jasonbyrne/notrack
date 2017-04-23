@@ -180,12 +180,23 @@ function create_file() {
 #   None
 #--------------------------------------------------------------------
 function create_sqltables {
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE IF NOT EXISTS live (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, sys TINYTEXT, dns_request TINYTEXT, dns_result CHAR(1));"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE IF NOT EXISTS historic (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, sys TINYTEXT, dns_request TINYTEXT, dns_result CHAR(1));"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE IF NOT EXISTS users (id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, user TINYTEXT, pass TEXT, level CHAR(1));"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE IF NOT EXISTS blocklist (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, bl_source TINYTEXT, site TINYTEXT, site_status BOOLEAN, comment TEXT);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE IF NOT EXISTS lightyaccess (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, site TINYTEXT, http_method CHAR(4), uri_path TEXT, referrer TEXT, user_agent TEXT, remote_host TEXT);"
-  
+
+  # Live
+  mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE live (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, sys TINYTEXT, dns_request TINYTEXT, dns_result CHAR(1));"
+  # Historic
+  mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE historic (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, sys TINYTEXT, dns_request TINYTEXT, dns_result CHAR(1));"
+  # Users
+  mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE users (id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, user TINYTEXT, pass TEXT, level CHAR(1));"
+  # Blocklist
+  mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE blocklist (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, bl_source VARCHAR(64), site TINYTEXT, site_reverse TINYTEXT, site_status BOOLEAN, comment TEXT);"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE `blocklist` ADD INDEX `bl_source` (`bl_source`);"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE `blocklist` ADD INDEX `site_reverse` (`site_reverse` (32));"
+  # lightyaccess
+  mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE lightyaccess (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, site TINYTEXT, http_method CHAR(4), uri_path TEXT, referrer TEXT, user_agent TEXT, remote_host TEXT);"
+  # Config table
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE config (config_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, config_type VARCHAR(16), option_name VARCHAR(16), option_value TEXT, option_enabled BOOLEAN);"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE `config` ADD INDEX `config_type` (`config_type`, `option_name`);"
+
   if [ -e "/var/log/lighttpd/access.log" ]; then
     sudo chmod 775 /var/log/lighttpd/access.log  #Not SQL related, but my system was causing ntrk-parse to fail because of permissions  
   fi
@@ -208,6 +219,33 @@ function delete_file() {
     echo "Deleting file $1"
     rm "$1"                                      #If yes then delete it
   fi
+}
+
+#--------------------------------------------------------------------
+# Reverse Notation
+#   Flips a site domain from www.google.com to com.google.www
+#
+# Globals:
+#   None
+# Arguments:
+#   #$1 domain string to reverse
+# Returns:
+#   string
+#--------------------------------------------------------------------
+function reverseNotation() {
+    SITE=$1
+    SITE_ARRAY=(${SITE//./ })
+    SITE_REV=''
+
+    for (( idx=${#SITE_ARRAY[@]}-1 ; idx>=0 ; idx-- )) ; do
+        if [[ -z "$SITE_REV" ]]; then
+            SITE_REV="${SITE_ARRAY[idx]}"
+        else
+            SITE_REV="${SITE_REV}.${SITE_ARRAY[idx]}"
+        fi
+    done
+
+    echo "$SITE_REV"
 }
 
 
@@ -256,11 +294,13 @@ function addsite() {
       ((Dedup++))
       return 0
     fi
-  
+
+    siteRev=$(reverseNotation "$site")
+
     if [ "${WhiteList[$site]}" ] || [ "${WhiteList[${BASH_REMATCH[1]}.${BASH_REMATCH[2]}${BASH_REMATCH[3]}]}" ]; then                 #Is sub.site.domain or site.domain in whitelist?    
-      SQLList+=("\"$site\",\"0\",\"$2\"")        #Add to SQL as Disabled      
+      SQLList+=("\"$site\",\"$siteRev\",\"0\",\"$2\"")        #Add to SQL as Disabled
     else                                         #No match in whitelist
-      SQLList+=("\"$site\",\"1\",\"$2\"")        #Add to SQL as Active
+      SQLList+=("\"$site\",\"$siteRev\",\"1\",\"$2\"")        #Add to SQL as Active
       SiteList[$site]=true                       #Add site into SiteList array
     fi
   #else
@@ -721,7 +761,7 @@ function insert_data() {
     
   printf "%s\n" "${SQLList[@]}" > "/tmp/$1.csv"   #Output arrays to file
   
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "LOAD DATA INFILE '/tmp/$1.csv' INTO TABLE blocklist FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' (@var1, @var2, @var3) SET id='NULL', bl_source = '$1', site = @var1, site_status=@var2, comment=@var3;"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "LOAD DATA INFILE '/tmp/$1.csv' INTO TABLE blocklist FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' (@var1, @var2, @var3, @var4) SET id='NULL', bl_source = '$1', site=@var1, site_reverse=@var2, site_status=@var3, comment=@var4;"
   rm "/tmp/$1.csv"
 }
 
@@ -1173,16 +1213,17 @@ function process_tldlist() {
   done < "$FILE_DOMAINBLACK"
   
   while IFS=$',\n' read -r TLD Name Risk _; do    
-    if [[ $Risk == 1 ]]; then      
+    siteRev=$(reverseNotation "$TLD")
+    if [[ $Risk == 1 ]]; then
       if [ ! "${DomainWhiteList[$TLD]}" ]; then  #Is site not in WhiteList
         SiteList[$TLD]=true
-        SQLList+=("\"$TLD\",\"1\",\"$Name\"")
+        SQLList+=("\"$TLD\",\"$siteRev\",\"1\",\"$Name\"")
         DomainList[$TLD]=true
       fi    
     else      
       if [ "${DomainBlackList[$TLD]}" ]; then      
         SiteList[$TLD]=true
-        SQLList+=("\"$TLD\",\"1\",\"$Name\"")
+        SQLList+=("\"$TLD\",\"$siteRev\",\"1\",\"$Name\"")
         DomainList[$TLD]=true
       fi
     fi
