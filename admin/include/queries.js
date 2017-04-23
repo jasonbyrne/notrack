@@ -27,7 +27,7 @@ function reportSite(site, blocked, showreport) {
     Msg = "<p>Invalid site</p>";
   }  
   else if (/.*\.akamai\.net$|akamaiedge\.net$/.test(site)) {  //Is it an Akami site?
-    Msg = "<p>Akami is a Content Delivery Network (CDN) providing media delivery for a wide range of websites.</p><p>It is more efficient to block the originating website, rather than an Akami subdomain.</p>";
+    Msg = "<p>Akamai is a Content Delivery Network (CDN) providing media delivery for a wide range of websites.</p><p>It is more efficient to block the originating website, rather than an Akamai subdomain.</p>";
   }
   else if (ValidateIPaddress(site)) {            //Is it an IP Address
     Msg = "<p>Unable to Block IP addresses.<br>You could add it to your Firewall instead</p>";

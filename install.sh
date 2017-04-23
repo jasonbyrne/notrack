@@ -1798,6 +1798,10 @@ fi
 service_restart dnsmasq
 service_restart lighttpd
 
+echo "Setting some default values"
+sudo /usr/local/sbin/ntrk-exec --bm-pxl
+
+
 echo "Downloading List of Trackers"
 sudo /usr/local/sbin/notrack -f
 

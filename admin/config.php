@@ -523,15 +523,19 @@ function update_webserver_config() {
   
   if (isset($_POST['block'])) {
     switch ($_POST['block']) {
-      case 'message':
-        $Config['BlockMessage'] = 'message';
-        exec(NTRK_EXEC.'--bm-msg');
-        break;
-      case 'pixel':
-        $Config['BlockMessage'] = 'pixel';
-        exec(NTRK_EXEC.'--bm-pxl');
-        break;      
-    }
+        case 'message':
+            $Config['BlockMessage'] = 'message';
+            exec(NTRK_EXEC.'--bm-msg');
+            break;
+		case 'pixel':
+			$Config['BlockMessage'] = 'pixel';
+			exec(NTRK_EXEC.'--bm-pxl');
+			break;
+		case 'custom':
+			$Config['BlockMessage'] = 'custom';
+			exec(NTRK_EXEC.'--bm-custom');
+			break;
+	}
   }
 }
 

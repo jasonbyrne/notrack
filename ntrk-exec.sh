@@ -40,10 +40,14 @@ readonly DBNAME="ntrkdb"
 function block_message() {
   if [[ $1 == "message" ]]; then
     echo 'Setting Block message Blocked by NoTrack'
+    cp /var/www/html/sink/message.html /var/www/html/sink/index.html &> /dev/null
     echo '<p>Blocked by NoTrack</p>' | tee /var/www/html/sink/index.html &> /dev/null
   elif [[ $1 == "pixel" ]]; then
     echo 'Setting Block message to pixel'
-    echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="" />' | tee /var/www/html/sink/index.html &> /dev/null
+    cp /var/www/html/sink/image.html /var/www/html/sink/index.html &> /dev/null
+  else
+    echo 'Setting Block message to custom'
+    cp /var/www/html/sink/custom.html /var/www/html/sink/index.html &> /dev/null
   fi
   
   if getent passwd www-data > /dev/null 2>&1; then  #default group is www-data
@@ -437,6 +441,9 @@ if [ "$1" ]; then                         #Have any arguments been given
       ;;
       --bm-pxl)
         block_message "pixel"
+      ;;
+      --bm-custom)
+        block_message "custom"
       ;;
       --copy)
         if [[ $2 == "'black'" ]]; then
