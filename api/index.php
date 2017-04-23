@@ -8,7 +8,7 @@ $db = new mysqli(SERVERNAME, USERNAME, PASSWORD, DBNAME);
  * Search for the reason we are blocking the site using reverse notation.
  *
  * @param $site
- * @return null|object|stdClass
+ * @return array
  */
 function getReasonBlocked($site) {
 	global $db;
@@ -33,12 +33,16 @@ function getReasonBlocked($site) {
 
 	// Look for a matching block reason
 	$result = $db->query('SELECT bl_source, site, comment FROM blocklist WHERE site_reverse IN ("' . implode('","', $search) . '")');
+	$out = array();
+
 	if ($result->num_rows > 0) {
-		return $result->fetch_all();
+		while ($obj = $result->fetch_object()) {
+			$out[] = $obj;
+		}
+		$result->close();
 	}
 
-	// No block reason found
-	return null;
+	return $out;
 
 }
 
@@ -56,7 +60,7 @@ if (isset($_GET['q'])) {
 		$payload = new stdClass();
 		// If we round a reason
 		if ($reason) {
-			$payload->message = 'This URL was blocked by ' . $reason[0]['bl_source'];
+			$payload->message = 'This URL was blocked by ' . $reason[0]->bl_source;
 			$payload->data = $reason;
 		}
 		// If reason found

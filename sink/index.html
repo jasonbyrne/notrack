@@ -1,1 +1,41 @@
-<img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NoTrack</title>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+            crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $.get('/api/index.php?q=' + encodeURI(window.location.href))
+                .done(function(json) {
+                    if ($.isArray(json.data)) {
+                        var blockedBy = [];
+                        $.each(json.data, function() {
+                            blockedBy.push(this.bl_source);
+                        });
+                        $('#reason').html('This URL was blocked by: ' + blockedBy.join(', '));
+                    }
+                    else {
+                        $('#reason').html('This URL was blocked for an unknown reason.');
+                    }
+                })
+                .fail(function() {
+                    $('#reason').html('This URL was blocked for an unknown reason.')
+                });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Site Blocked by NoTrack</h1>
+    </header>
+    <main>
+        <div id="reason">
+            Loading reason...
+        </div>
+    </main>
+</body>
+</html>
