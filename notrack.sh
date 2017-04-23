@@ -189,13 +189,13 @@ function create_sqltables {
   mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE users (id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, user TINYTEXT, pass TEXT, level CHAR(1));"
   # Blocklist
   mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE blocklist (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, bl_source VARCHAR(64), site TINYTEXT, site_reverse TINYTEXT, site_status BOOLEAN, comment TEXT);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE `blocklist` ADD INDEX `bl_source` (`bl_source`);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE `blocklist` ADD INDEX `site_reverse` (`site_reverse` (32));"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE blocklist ADD INDEX bl_source (bl_source);"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE blocklist ADD INDEX site_reverse (site_reverse (32));"
   # lightyaccess
   mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE lightyaccess (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, site TINYTEXT, http_method CHAR(4), uri_path TEXT, referrer TEXT, user_agent TEXT, remote_host TEXT);"
   # Config table
   mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE config (config_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, config_type VARCHAR(16), option_name VARCHAR(16), option_value TEXT, option_enabled BOOLEAN);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE `config` ADD INDEX `config_type` (`config_type`, `option_name`);"
+  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE config ADD INDEX config_type (config_type, option_name);"
 
   if [ -e "/var/log/lighttpd/access.log" ]; then
     sudo chmod 775 /var/log/lighttpd/access.log  #Not SQL related, but my system was causing ntrk-parse to fail because of permissions  
