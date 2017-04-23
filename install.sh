@@ -769,13 +769,13 @@ function setup_mariadb() {
   mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE users (id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, user TINYTEXT, pass TEXT, level CHAR(1));"
   # Blocklist
   mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE blocklist (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, bl_source VARCHAR(64), site TINYTEXT, site_reverse TINYTEXT, site_status BOOLEAN, comment TEXT);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE blocklist ADD INDEX bl_source (bl_source);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE blocklist ADD INDEX site_reverse (site_reverse (32));"
+  mysql --user="$USER" --password="$PASSWORD" -D ntrkdb -e "ALTER TABLE blocklist ADD INDEX bl_source (bl_source);"
+  mysql --user="$USER" --password="$PASSWORD" -D ntrkdb -e "ALTER TABLE blocklist ADD INDEX site_reverse (site_reverse (32));"
   # lightyaccess
   mysql --user=ntrk --password=ntrkpass -D ntrkdb -e "CREATE TABLE lightyaccess (id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, log_time DATETIME, site TINYTEXT, http_method CHAR(4), uri_path TEXT, referrer TEXT, user_agent TEXT, remote_host TEXT);"
   # Config table
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "CREATE TABLE config (config_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, config_type VARCHAR(16), option_name VARCHAR(16), option_value TEXT, option_enabled BOOLEAN);"
-  mysql --user="$USER" --password="$PASSWORD" -D "$DBNAME" -e "ALTER TABLE config ADD INDEX config_type (config_type, option_name);"
+  mysql --user="$USER" --password="$PASSWORD" -D ntrkdb -e "CREATE TABLE config (config_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, config_type VARCHAR(16), option_name VARCHAR(16), option_value TEXT, option_enabled BOOLEAN);"
+  mysql --user="$USER" --password="$PASSWORD" -D ntrkdb -e "ALTER TABLE config ADD INDEX config_type (config_type, option_name);"
 
   echo "Creating CRON job for Log Parser"
   echo -e "*/7 * * * *\troot\t/usr/local/sbin/ntrk-parse" | sudo tee /etc/cron.d/ntrk-parse &> /dev/null
