@@ -15,8 +15,7 @@ You can use it on a Raspberry Pi with a fresh install of [Raspbian Lite](https:/
 # To Install:  
 Tutorial Guide: https://youtu.be/MHsrdGT5DzE  
 ```bash
-wget https://raw.githubusercontent.com/quidsup/notrack/master/install.sh  
-bash install.sh
+wget https://raw.githubusercontent.com/jasonbyrne/notrack/master/install.sh && chmod +x install.sh && ./install.sh
 ```
 
 Point the DNS IP of all your systems to your NoTrack device.
