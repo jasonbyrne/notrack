@@ -319,20 +319,20 @@ function get_blocklistname($bl) {
  */
 function search_blockreason($site) {
   global $db;
-  
+
   $result = $db->query('SELECT bl_source site FROM blocklist WHERE site = \''.$site.'\'');
   if ($result->num_rows > 0) {
     return $result->fetch_row()[0];
   }
-  
-    
+
+
   //Try to find LIKE site ending with site.tld
   if (preg_match('/([\w\d\-\_]+)\.([\w\d\-\_]+)$/', $site,  $matches) > 0) {
     $result = $db->query('SELECT bl_source site FROM blocklist WHERE site LIKE \'%'.$matches[1].'.'.$matches[2].'\'');
 
     if ($result->num_rows > 0) {
       return $result->fetch_row()[0];
-    }    
+    }
     else {                                      //On fail try for site = .tld
       $result = $db->query('SELECT bl_source site FROM blocklist WHERE site = \'.'.$matches[2].'\'');
       if ($result->num_rows > 0) {
@@ -340,8 +340,8 @@ function search_blockreason($site) {
       }
     }
   }
-  
-  return '';                                     //Don't know at this point    
+
+  return '';                                     //Don't know at this point
 }
 
 //Need to ammend for historic view TODO

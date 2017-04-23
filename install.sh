@@ -700,6 +700,7 @@ setup_lighttpd() {
   
   echo "Creating symlink from $INSTALL_LOCATION/admin to /var/www/html/admin"
   sudo ln -s "$INSTALL_LOCATION/admin" /var/www/html/admin
+  sudo ln -s "$INSTALL_LOCATION/api" /var/www/html/api
   sudo chmod -R 775 /var/www/html                #Give read/write/execute privilages to Web folder
   
   sudoerscheck=$(sudo cat /etc/sudoers | grep "$group")
