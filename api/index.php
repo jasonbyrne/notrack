@@ -2,6 +2,8 @@
 require('../admin/include/global-vars.php');
 require('../admin/include/global-functions.php');
 
+$db = new mysqli(SERVERNAME, USERNAME, PASSWORD, DBNAME);
+
 /**
  * Search for the reason we are blocking the site using reverse notation.
  *
@@ -10,6 +12,13 @@ require('../admin/include/global-functions.php');
  */
 function getReasonBlocked($site) {
 	global $db;
+
+	// Must have database connection
+	if (!$db) {
+		$error = new stdClass();
+		$error->message = 'Could not connect to database';
+		echo json_encode((array) $error);
+	}
 
 	// Get reverse domain notation
 	$arr = explode('.', $site);
@@ -63,4 +72,4 @@ if (isset($_GET['q'])) {
 // Still here? Error
 $error = new stdClass();
 $error->message = 'Invalid API call';
-json_encode((array) $error);
+echo json_encode((array) $error);
