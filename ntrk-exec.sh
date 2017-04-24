@@ -26,6 +26,8 @@ readonly USER="ntrk"
 readonly PASSWORD="ntrkpass"
 readonly DBNAME="ntrkdb"
 
+readonly INSTALL_LOCATION=`cat /etc/notrack/install-location.txt`
+
 #--------------------------------------------------------------------
 # Block Message
 #   Sets Block message for sink page
@@ -40,14 +42,14 @@ readonly DBNAME="ntrkdb"
 function block_message() {
   if [[ $1 == "message" ]]; then
     echo 'Setting Block message Blocked by NoTrack'
-    cp /var/www/html/sink/message.html /var/www/html/sink/index.html &> /dev/null
+    cp "$INSTALL_LOCATION/sink/message.html" /var/www/html/sink/index.html &> /dev/null
     echo '<p>Blocked by NoTrack</p>' | tee /var/www/html/sink/index.html &> /dev/null
   elif [[ $1 == "pixel" ]]; then
     echo 'Setting Block message to pixel'
-    cp /var/www/html/sink/image.html /var/www/html/sink/index.html &> /dev/null
+    cp "$INSTALL_LOCATION/sink/image.html" /var/www/html/sink/index.html &> /dev/null
   else
     echo 'Setting Block message to custom'
-    cp /var/www/html/sink/custom.html /var/www/html/sink/index.html &> /dev/null
+    cp "$INSTALL_LOCATION/sink/custom.html" /var/www/html/sink/index.html &> /dev/null
   fi
   
   if getent passwd www-data > /dev/null 2>&1; then  #default group is www-data

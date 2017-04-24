@@ -691,8 +691,7 @@ setup_lighttpd() {
     
   echo "Creating Sink Folder"                    #Create new sink folder
   create_folder "/var/www/html/sink"
-  echo "Setting Block message to 1x1 pixel"
-  echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="" />' | sudo tee /var/www/html/sink/index.html &> /dev/null
+  #sudo cp "$INSTALL_LOCATION/sink/image.html" /var/www/html/sink/index.html
   
   echo "Changing ownership of sink folder to $group"
   sudo chown -hR "$group":"$group" /var/www/html/sink
@@ -820,6 +819,8 @@ function setup_notrack() {
   echo "Writing initial config"
   echo "IPVersion = $IP_VERSION" | sudo tee /etc/notrack/notrack.conf
   echo "NetDev = $NETWORK_DEVICE" | sudo tee -a /etc/notrack/notrack.conf
+  sudo touch /etc/notrack/install-location.txt
+  echo "$INSTALL_LOCATION" | sudo tee /etc/notrack/install-location.txt
   echo
   sleep 3s
 }
