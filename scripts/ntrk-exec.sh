@@ -422,7 +422,7 @@ fi
 
 
 if [ "$1" ]; then                         #Have any arguments been given
-  if ! Options=$(getopt -o hps -l accesslog,bm-msg,bm-pxl,delete-history,force,parsing,run-notrack,restart,save-conf,shutdown,upgrade,read:,write:,pause:,copy: -- "$@"); then
+  if ! Options=$(getopt -o hps -l accesslog,bm-msg,bm-pxl,bm-custom,delete-history,force,parsing,run-notrack,restart,save-conf,shutdown,upgrade,read:,write:,pause:,copy: -- "$@"); then
     # something went wrong, getopt will put out an error message for us
     exit 1
   fi

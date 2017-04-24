@@ -13,7 +13,7 @@
 #######################################
 readonly FILE_CONFIG="/etc/notrack/notrack.conf"
 
-readonly GIT_USER="quidsup"
+readonly GIT_USER="jasonbyrne"
 
 #######################################
 # Global Variables
@@ -205,5 +205,9 @@ if [ -e "$FILE_CONFIG" ]; then                  #Remove Latestversion number fro
   mv /tmp/notrack.conf "$FILE_CONFIG"
   echo
 fi
+
+# Set install location
+sudo touch /etc/notrack/install-location.txt
+echo "$INSTALL_LOCATION" | sudo tee /etc/notrack/install-location.txt
   
 echo "NoTrack update complete"

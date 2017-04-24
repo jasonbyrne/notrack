@@ -60,6 +60,8 @@ readonly USER="ntrk"
 readonly PASSWORD="ntrkpass"
 readonly DBNAME="ntrkdb"
 
+readonly INSTALL_LOCATION=`cat /etc/notrack/install-location.txt`
+
 declare -A URLList                               #Array of URL's
 URLList[notrack]="https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt"
 URLList[qmalware]="https://raw.githubusercontent.com/quidsup/notrack/master/malicious-sites.txt"

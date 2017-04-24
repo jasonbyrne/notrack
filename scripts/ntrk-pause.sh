@@ -15,6 +15,8 @@ readonly FILE_CONFIG="/etc/notrack/notrack.conf"
 readonly NOTRACK_LIST="/etc/dnsmasq.d/notrack.list"
 readonly NOTRACK_TEMP="/tmp/ntrkpause/notrack.list"
 
+readonly INSTALL_LOCATION=`cat /etc/notrack/install-location.txt`
+
 
 #######################################
 # Global Variables

@@ -25,6 +25,8 @@ readonly USER="ntrk"
 readonly PASSWORD="ntrkpass"
 readonly DBNAME="ntrkdb"
 
+readonly INSTALL_LOCATION=`cat /etc/notrack/install-location.txt`
+
 CURRENT_DAY="$(date +"%d")"
 CURRENT_DATE="$(date +"%Y-%m-%d")"
 YESTERDAY_DATE="$(date -d "1 day ago" "+%Y-%m-%d")"
