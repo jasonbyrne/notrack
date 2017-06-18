@@ -1,5 +1,5 @@
-#NoTrack Blocklist updated 21 Apr 2017
-#LatestVersion 0.8.4
+#NoTrack Blocklist updated 23 May 2017
+#LatestVersion 0.8.5
 1-cl0ud.com #Lead Forensics
 1-creative-1.com #Lead Forensics
 103bees.com #Tracker Unknown
@@ -92,6 +92,7 @@ a1webstats.com #A1Webstats
 a2dfp.net #Tracker Unknown
 a8bt.com #Advertising
 a9.com #Amazon
+aakn.com #Advertising Unknown
 abbp1.science #Advertising Unknown
 abetterweb.mobi #instartlogic
 abetterweb.org #instartlogic
@@ -130,6 +131,7 @@ adalyser.com #Adalyser
 adalyser.net #Adalyser
 adap.tv #AOL
 adblade.com #Adblade
+adblockerkillswebsites.pw
 adbrain.com #Adbrain
 adbrau.com #Advertising Unknown
 adbrn.com #Adbrain
@@ -416,7 +418,6 @@ alephd.com #AOL
 alertbot.co.uk
 algonetwork.com #RevenueHits
 algovise.com #RevenueHits
-alicdn.com
 alicili.org #Advertising
 aliunicorn.com
 alnisrgroup.com
@@ -789,6 +790,11 @@ cash4fundraising.com #Digital Window
 cashbackwindow.com #Digital Window
 cashforfundraising.com #Digital Window
 cashlantis.com
+cccampaigns.com #Email Vision
+ccemails.com #Email Vision
+ccmd2.com #Email Vision
+ccmdcampaigns.com #Email Vision
+ccmdemail.com #Email Vision
 ccmp.eu #Experian
 cctyly.com #Advertising
 cdn-net.com
@@ -805,6 +811,7 @@ centralcore7.com #Lead Forensics
 ceros.com
 certona.net
 cetrk.com
+chaintraffic.com #Popunder
 chameleon.ad #Chameleon
 chango.com
 channeladvisor.com
@@ -1227,6 +1234,7 @@ domdex.com
 dotandad.com
 dotomi.com
 doubleclickbygoogle.com #Google
+doublepimpssl.com #Double Pimp
 doubleverify.com
 dowjoneson.com
 dpchica.mobi #Millennial Media
@@ -1342,6 +1350,7 @@ emailmeter.com #Click Meter
 emailreporting.com #Campaign Monitor Pty
 emailreports.info #Campaign Monitor Pty
 emailretargeting.com
+emailvision.com #Email Vision
 emark.nl #Emark
 embed.ly #Embedly
 emediate.com #Cxsense
@@ -1361,7 +1370,9 @@ emlfiles7.com #dotmailer
 emlfiles8.com #dotmailer
 emlfiles9.com #dotmailer
 emltrk.com
+emlv01.com #Email Vision
 emv3.com
+emvnmp.com #Email Vision
 en25.com #Oracle
 enecto.com #Enecto
 enecto.net #Enecto
@@ -11064,8 +11075,14 @@ nl03.net #NetLine
 nl04.net #NetLine
 nlytcs.diffen.com #Diffen
 nmgcdn.com
+nmp1.com #Email Vision
+nmp2.com #Email Vision
+nmp4.com #Email Vision
+nmp5.com #Email Vision
+nmp6.com #Email Vision
 nobeta.com.br #NoBeta
 nosto.com #Nosto
+notificationmessaging.com #Email Vision
 novao.com #Ysance
 novao.net #Ysance
 npario-inc.net #nPario
@@ -11220,6 +11237,7 @@ pingmemessenger.net #RadiumOne
 pingmemessenger.us #RadiumOne
 pipeaota.com
 pippio.com #Arbor
+piwik.com-online.com #PIWIK
 piwik.pro #Piwik PRO
 piwik.root.ax #PIWIK Analytics
 piwikpro.com #Piwik PRO
@@ -11957,6 +11975,7 @@ technorati.com #Technorati
 technoratimedia.com #Technorati
 technoratimedia.net #Technorati
 tedglynn.com #Ad Web
+telemetry-in.battle.net #Battle.net
 telemetry.api.swiftkey.com #Swiftkey
 telemetry.battle.net #Blizzard
 telemetry.gfe.nvidia.com #Nvidia
@@ -12013,6 +12032,7 @@ topdealz.click #msales
 topfox.co.uk
 topoffers.click #msales
 topquantnetwork.com
+tororango.com #Double Pimp
 touchcommerce.com #Touch Commerce
 touchcommerce.london #Touch Commerce
 touchstoneresearch.com #Touchstone Research
@@ -12158,6 +12178,7 @@ uptilt.net #Aurea
 urbanairship.com
 usabilla.com #Usabilla
 useitbetter.com
+user-agent-tracker.herokuapp.com #Heroku
 user-api.com #Advertising
 userreplay.net
 userreport.com #User Report
@@ -12386,6 +12407,7 @@ ziffdavisinternational.com
 zkcdn.net
 znaptag.com
 zoomanalytics.co #Zoom Analytics
+zopim.com #Zendesk Chat
 zqtk.net #comScore
 zsj18.com #Advertising
 zxad.com #Zanox

@@ -40,14 +40,32 @@ Config[bl_areasy]=0                              #Arab
 Config[bl_chneasy]=0                             #China
 Config[bl_deueasy]=0                             #Germany
 Config[bl_dnkeasy]=0                             #Denmark
+Config[bl_fraeasy]=0                             #France
+Config[bl_grceasy]=0                             #Greece
+Config[bl_huneasy]=0                             #Hungary
+Config[bl_idneasy]=0                             #Indonesia
+Config[bl_isleasy]=0                             #Iceland
+Config[bl_itaeasy]=0                             #Italy
+Config[bl_jpneasy]=0                             #Japan
+Config[bl_koreasy]=0                             #Korea Easy List
+Config[bl_korfb]=0                               #Korea Fanboy
+Config[bl_koryous]=0                             #Korea Yous
+Config[bl_ltueasy]=0                             #Lithuania
+Config[bl_lvaeasy]=0                             #Latvia
+Config[bl_nldeasy]=0                             #Netherlands
+Config[bl_poleasy]=0                             #Polish
 Config[bl_ruseasy]=0                             #Russia
+Config[bl_spaeasy]=0                             #Spain
+Config[bl_svneasy]=0                             #Slovenian
+Config[bl_sweeasy]=0                             #Sweden
+Config[bl_viefb]=0                               #Vietnam Fanboy
 Config[bl_fblatin]=0                             #Portugal/Spain (Latin Countries)
 Config[bl_yhosts]=0                              #China yhosts
 
 #######################################
 # Constants
 #######################################
-readonly VERSION="0.8.4"
+readonly VERSION="0.8.5"
 readonly MAIN_BLOCKLIST="/etc/dnsmasq.d/notrack.list"
 readonly FILE_BLACKLIST="/etc/notrack/blacklist.txt"
 readonly FILE_WHITELIST="/etc/notrack/whitelist.txt"
@@ -88,8 +106,27 @@ URLList[areasy]="https://easylist-downloads.adblockplus.org/Liste_AR.txt"
 URLList[chneasy]="https://easylist-downloads.adblockplus.org/easylistchina.txt"
 URLList[deueasy]="https://easylist-downloads.adblockplus.org/easylistgermany.txt"
 URLList[dnkeasy]="https://adblock.dk/block.csv"
-URLList[ruseasy]="https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt"
 URLList[fblatin]="https://www.fanboy.co.nz/fanboy-espanol.txt"
+URLList[fineasy]="http://adb.juvander.net/Finland_adb.txt"
+URLList[fraeasy]="https://easylist-downloads.adblockplus.org/liste_fr.txt"
+URLList[grceasy]="https://www.void.gr/kargig/void-gr-filters.txt"
+URLList[huneasy]="https://raw.githubusercontent.com/szpeter80/hufilter/master/hufilter.txt"
+URLList[idneasy]="https://raw.githubusercontent.com/ABPindo/indonesianadblockrules/master/subscriptions/abpindo.txt"
+URLList[isleasy]="http://adblock.gardar.net/is.abp.txt"
+URLList[itaeasy]="https://easylist-downloads.adblockplus.org/easylistitaly.txt"
+URLList[jpneasy]="https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt"
+URLList[koreasy]="https://raw.githubusercontent.com/gfmaster/adblock-korea-contrib/master/filter.txt"
+URLList[korfb]="https://www.fanboy.co.nz/fanboy-korean.txt"
+URLList[koryous]="https://raw.githubusercontent.com/yous/YousList/master/youslist.txt"
+URLList[ltueasy]="http://margevicius.lt/easylistlithuania.txt"
+URLList[lvaeasy]="https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt"
+URLList[nldeasy]="https://easylist-downloads.adblockplus.org/easylistdutch.txt"
+URLList[poleasy]="https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt"
+URLList[ruseasy]="https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt"
+URLList[spaeasy]="https://easylist-downloads.adblockplus.org/easylistspanish.txt"
+URLList[svneasy]="https://raw.githubusercontent.com/betterwebleon/slovenian-list/master/filters.txt"
+URLList[sweeasy]="https://www.fanboy.co.nz/fanboy-swedish.txt"
+URLList[viefb]="https://www.fanboy.co.nz/fanboy-vietnam.txt"
 URLList[yhosts]="https://raw.githubusercontent.com/vokins/yhosts/master/hosts"
 
 #######################################
@@ -128,7 +165,7 @@ function error_exit() {
 
 #######################################
 # Restart service
-#    with either systemd or sysvinit
+#    with either systemd or sysvinit or runit
 #
 # Globals:
 #   None
@@ -144,6 +181,8 @@ service_restart() {
       sudo systemctl restart $1
     elif [ "$(command -v service)" ]; then       #sysvinit
       sudo service $1 restart
+    elif [ "$(command -v sv)" ]; then            #runit
+      sudo sv restart $1
     else
       error_exit "Unable to restart services. Unknown service supervisor" "21"
     fi
@@ -1674,13 +1713,42 @@ get_list "spam404" "easylist"
 get_list "swissransom" "plain"
 get_list "swisszeus" "plain"
 get_list "winhelp2002" "unix"
+get_list "fblatin" "easylist"
 get_list "areasy" "easylist"
 get_list "chneasy" "easylist"
 get_list "deueasy" "easylist"
 get_list "dnkeasy" "easylist" 
+get_list "fraeasy" "easylist"
+get_list "grceasy" "easylist"
+get_list "huneasy" "easylist"
+get_list "idneasy" "easylist"
+get_list "isleasy" "easylist"
+get_list "itaeasy" "easylist"
+get_list "jpneasy" "easylist"
+get_list "koreasy" "easylist"
+get_list "korfb" "easylist"
+get_list "koryous" "easylist"
+get_list "ltueasy" "easylist"
+get_list "lvaeasy" "easylist"
+get_list "nldeasy" "easylist"
+get_list "poleasy" "easylist"
 get_list "ruseasy" "easylist"
-get_list "fblatin" "easylist"
+get_list "spaeasy" "easylist"
+get_list "svneasy" "easylist"
+get_list "sweeasy" "easylist"
+get_list "viefb" "easylist"
 get_list "yhosts" "unix"
+
+
+URLList[ltueasy]="http://margevicius.lt/easylistlithuania.txt"
+URLList[lvaeasy]="https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt"
+URLList[nldeasy]="https://easylist-downloads.adblockplus.org/easylistdutch.txt"
+URLList[poleasy]="https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt"
+URLList[ruseasy]="https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt"
+URLList[spaeasy]="https://easylist-downloads.adblockplus.org/easylistspanish.txt"
+URLList[svneasy]="https://raw.githubusercontent.com/betterwebleon/slovenian-list/master/filters.txt"
+URLList[sweeasy]="https://www.fanboy.co.nz/fanboy-swedish.txt"
+URLList[viefb]="https://www.fanboy.co.nz/fanboy-vietnam.txt"
 
 get_custom                                       #Process Custom Block lists
 
